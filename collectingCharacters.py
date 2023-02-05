@@ -189,9 +189,18 @@ def main():
         cv2.imshow("Frame", frame)
         cv2.imshow("Canny Edge Window with Hand Landmarks", new_image)
 
+        sign = cv2.imread('pics/isl_alpha.jpg')
+        sign = cv2.resize(sign, (679,406))
+        cv2.imshow('Reference Alphabets',sign)
+        
+        num = cv2.imread('pics/isl_num.jpg')
+        num = cv2.resize(num, (237,306))
+        cv2.imshow('Reference Numbers',num)
+
         # cv2.imshow("non-flipped", non_flipped)
 
         flag = cv2.waitKey(10)
+
         if flag & 0xFF == 27: # ordinal value of Esc key
             break
         if flag & 0xFF == ord('0'):
