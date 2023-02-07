@@ -39,7 +39,6 @@ def draw_hand_connections(img, results):
 
                 # Drawing the landmark connections
                 mpDraw.draw_landmarks(img, handLms, mpHands.HAND_CONNECTIONS)
-
         return img
 
 
