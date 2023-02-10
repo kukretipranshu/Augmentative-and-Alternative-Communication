@@ -14,7 +14,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 model = Sequential()
 
 # 1st Convolutional layer
-model.add(Convolution2D(32,(3,3), input_shape = (300,300,3), activation = 'relu'))
+model.add(Convolution2D(32,(3,3), input_shape = (300,300,1), activation = 'relu'))
 
 # 1st Maxpool layer
 model.add(MaxPooling2D((2,2)))
