@@ -1,5 +1,4 @@
 # Importing the Keras libraries and packages
-import tensorflow as tf
 from keras.layers import MaxPooling2D
 from keras.layers import Convolution2D
 from keras.layers import Dense , Dropout
@@ -8,9 +7,6 @@ import os
 from keras.models import Sequential
 from keras.preprocessing.image import ImageDataGenerator
 
-# gpus = tf.config.experimental.list_physical_devices('GPU')
-# tf.config.experimental.set_memory_growth(gpus[0], True)
-
 # Specifying that we are using GPU while training
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
@@ -18,7 +14,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 model = Sequential()
 
 # 1st Convolutional layer
-model.add(Convolution2D(32,(3,3), input_shape = (300,300,3), activation = 'relu'))
+model.add(Convolution2D(32,(3,3), input_shape = (400,400,1), activation = 'relu'))
 
 # 1st Maxpool layer
 model.add(MaxPooling2D((2,2)))
@@ -44,7 +40,7 @@ model.add(Dropout(0.40))
 
 model.add(Dense(64, activation='relu'))
 
-# Here 27 is the number of category, right now it is not fixed
+# Here 36 is the number of category, right now it is not fixed
 model.add(Dense(36, activation='softmax'))
 
 # Compiling the CNN
@@ -53,18 +49,19 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 # print(model.summary())
 
 
-training_datagen = ImageDataGenerator(rescale=1./255, shear_range= 0.2, zoom_range=0.2)
+training_datagen = ImageDataGenerator(rescale=1./255, shear_range= 0.2, zoom_range=0.2, horizontal_flip= True)
 
 testing_datagen = ImageDataGenerator(rescale=1./255)
 
+dstpath = r'D:\majorproject\Augmentative-and-Alternative-Communication\dataset\train_set' # Destination Folder
+dstpath1 = r'D:\majorproject\Augmentative-and-Alternative-Communication\dataset\test_set' # Destination Folder
+training_dataset = training_datagen.flow_from_directory(dstpath, target_size= (400,400), batch_size=20, color_mode='grayscale', class_mode= 'categorical')
 
-training_dataset = training_datagen.flow_from_directory('dataset/train_set', target_size= (300,300), batch_size=20, color_mode='rgb', class_mode= 'categorical')
-
-testing_dataset = testing_datagen.flow_from_directory('dataset/test_set', target_size= (300,300), batch_size=20, color_mode='rgb', class_mode= 'categorical')
+testing_dataset = testing_datagen.flow_from_directory(dstpath1, target_size= (400,400), batch_size=20, color_mode='grayscale', class_mode= 'categorical')
 
 batch_size = 50
 
-model.fit_generator(training_dataset, steps_per_epoch= 43681 // 20, epochs = 8, validation_data= testing_dataset, validation_steps= 13000 // 20)
+model.fit_generator(training_dataset, steps_per_epoch= 23658 // 50, epochs = 8, validation_data= testing_dataset, validation_steps= 10000 // 50)
 
 # Saving the model
 saved_model = model.to_json()
@@ -76,7 +73,3 @@ print("Model Successfully Saved")
 # Saving the model's weight
 model.save_weights('sign_model.h5')
 print('Weight Successfully Saved')
-
-
-
-

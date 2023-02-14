@@ -15,7 +15,7 @@ mpDraw = mp.solutions.drawing_utils
 
 minValue = 70
 path = r'D:\majorproject\Augmentative-and-Alternative-Communication\ISL_Folder' # Source Folder
-dstpath = r'D:\majorproject\Augmentative-and-Alternative-Communication\todata' # Destination Folder
+dstpath = r'D:\majorproject\Augmentative-and-Alternative-Communication\mydata' # Destination Folder
 
 
 
@@ -34,13 +34,13 @@ for file in files:
     file = os.listdir(os.path.join(path,curr_file))
     for image in file:
         print(image)
-        print(os.path.join(path,curr_file,image))
+        # print(os.path.join(path,curr_file,image))
         img = cv2.imread(os.path.join(path,curr_file,image))
         gray = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
-        # blur = cv2.GaussianBlur(gray,(5,5),2)
-
-        # th3 = cv2.adaptiveThreshold(blur,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY_INV,11,2)
-        # ret, res = cv2.threshold(th3, minValue, 255, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
+        gray = cv2.GaussianBlur(gray,(5,5),2)
+        # gray = np.array(gray * 255, dtype = np.uint8)
+        # gray = cv2.adaptiveThreshold(gray,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,199,5)
+        # ret, gray = cv2.threshold(gray, minValue, 255, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
         results = hands.process(gray)
         if results.multi_hand_landmarks:
             for handLms in results.multi_hand_landmarks:
@@ -58,5 +58,5 @@ for file in files:
                     mpDraw.draw_landmarks(gray, handLms, mpHands.HAND_CONNECTIONS)
             # return gray
         gray = cv2.Canny(gray,80,150)
-        # gray = cv2.resize(gray, (300,300))
+        gray = cv2.resize(gray, (300,300))
         cv2.imwrite(os.path.join(dstpath,curr_file,image),gray)
