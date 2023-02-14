@@ -1,0 +1,11 @@
+archive*
+dataset*
+fromdata
+todata*
+ISL_Folder
+mydata
+old_dataset
+sign_model.h5
+sign_model.json
+*.zip
+model
